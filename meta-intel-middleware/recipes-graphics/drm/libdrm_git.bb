@@ -18,7 +18,7 @@ PV = "2.4.99"
 
 S = "${WORKDIR}/git"
 
-SRCREV = "33db83fd1a4b79a918e7ca4297c0484bd263a825"
+SRCREV = "b2103fa3257daa6acfdc6f4d4d8565abebaec4a8"
 
 inherit autotools pkgconfig manpages
 

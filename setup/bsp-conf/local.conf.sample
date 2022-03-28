@@ -63,7 +63,7 @@ MACHINE_ESSENTIAL_EXTRA_RDEPENDS_remove = "intel-microcode"
 INITRD_LIVE_remove = "${DEPLOY_DIR_IMAGE}/microcode.cpio"
 
 # Make image boot to runlevel 3 by default
-APPEND = "3 snd_hda_intel.power_save=1 snd_hda_intel.power_save_controller=y scsi_mod.scan=async i915.enable_guc=2 reboot=efi console=ttyS2,115200n8 intel_iommu=on,ipu_off"
+APPEND = "quiet loglevel=3 vga=current vt.global_cursor_default=0 5 snd_hda_intel.power_save=1 snd_hda_intel.power_save_controller=y scsi_mod.scan=async i915.enable_guc=2 reboot=efi console=ttyS2,115200n8 intel_iommu=on,ipu_off"
 
 WKS_FILE = "systemd-bootdisk-microcode-custom.wks.in"
 #
@@ -169,6 +169,7 @@ DISTRO_FEATURES_BACKFILL_CONSIDERED = "sysvinit"
 # The default is a downloads directory under TOPDIR which is the build directory.
 #
 #DL_DIR ?= "${TOPDIR}/downloads"
+DL_DIR ?= "/home/toshi/downloads"
 
 #
 # Where to place shared-state files
@@ -185,6 +186,7 @@ DISTRO_FEATURES_BACKFILL_CONSIDERED = "sysvinit"
 # The default is a sstate-cache directory under TOPDIR.
 #
 #SSTATE_DIR ?= "${TOPDIR}/sstate-cache"
+SSTATE_DIR ?= "/home/toshi/sstate-cache"
 
 #
 # Where to place the build output
@@ -356,3 +358,53 @@ require conf/distro/include/security_flags.inc
 SECURITY_CFLAGS = "-fstack-protector-strong -pie -fpie -fPIC -D_FORTIFY_SOURCE=2 -O2 -Wformat -Wformat-security"
 SECURITY_NO_PIE_CFLAGS = "-fstack-protector-strong -D_FORTIFY_SOURCE=2 -O2 -Wformat -Wformat-security"
 SECURITY_LDFLAGS = "-Wl,-z,relro,-z,now,-z,noexecstack"
+
+# X Window
+IMAGE_INSTALL_append = " fvwm xterm"
+
+# SSH
+IMAGE_FEATURES_append = " ssh-server-openssh"
+IMAGE_INSTALL_append += " openssh openssh-sftp"
+
+#NetUtils
+IMAGE_INSTALL_append += " vsftpd inetutils-ftp"
+IMAGE_INSTALL_append += " inetutils-telnetd inetutils-telnet"
+
+# command
+IMAGE_INSTALL_append += " tcpdump i2c-tools git"
+IMAGE_INSTALL_append += " dosfstools haveged ethtool net-tools lshw"
+#IMAGE_INSTALL_append += " php php-cli php-fpm"
+
+# daemon
+# RTC correct with systemd
+IMAGE_INSTALL_append += " chrony"
+CORE_IMAGE_EXTRA_INSTALL += " dhcp-server"
+IMAGE_INSTALL_append += " lldpd nginx avahi-daemon libavahi-client avahi-utils avahi-dev libavahi-common redis"
+
+# Test Tools
+IMAGE_INSTALL_append += " gcov gcov-symlinks"
+CORE_IMAGE_EXTRA_INSTALL += " lcov"
+
+# Qt
+IMAGE_INSTALL_append += " krb5"
+IMAGE_INSTALL_append += " qtbase qtbase-dev qtbase-mkspecs qtbase-plugins qtbase-tools qtdeclarative qtdeclarative-dev qtdeclarative-mkspecs qtquickcontrols2 qtquickcontrols2-dev qtquickcontrols2-mkspecs qtvirtualkeyboard"
+PACKAGECONFIG_append_pn-qtbase = " sql-sqlite"
+
+# Japanese
+IMAGE_INSTALL_append += " tzdata takao-fonts setxkbmap"
+IMAGE_INSTALL_append_pn-core-image-sato = " takao-fonts"
+IMAGE_INSTALL_append_pn-core-image-sato-sdk = " takao-fonts"
+DEFAULT_TIMEZONE = "Asia/Tokyo"
+IMAGE_LINGUAS = " ja-jp ja-jp.euc-jp en-us en-gb"
+
+# package
+EXTRA_IMAGE_FEATURES_append = " package-management read-only-rootfs"
+PACKAGE_CLASSES = "package_deb"
+#IMAGE_ROOTFS_EXTRA_SPACE = "1048576"
+
+# extra
+BB_NUMBER_THREADS = "4"
+PARALLEL_MAKE = "-j 2"
+
+#IMAGE_FSTYPES += " wic.vdi"
+

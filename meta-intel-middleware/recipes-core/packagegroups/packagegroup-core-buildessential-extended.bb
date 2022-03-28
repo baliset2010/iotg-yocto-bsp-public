@@ -51,8 +51,6 @@ RDEPENDS_packagegroup-core-buildessential-extended = "\
     mtools \
     nasm \
     ncurses \
-    nfs-utils \
-    nfs-utils-client \
     nspr \
     p7zip \
     patch \
@@ -66,7 +64,6 @@ RDEPENDS_packagegroup-core-buildessential-extended = "\
     python-pyserial \
     rpm \
     rpm-build \
-    samba \
     strace \
     syslinux \
     tar \
